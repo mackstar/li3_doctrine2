@@ -9,6 +9,7 @@
 namespace li3_doctrine2\extensions\data\source;
 
 use lithium\core\Environment;
+use lithium\aop\Filters;
 use Doctrine\ORM\Events;
 use Doctrine\ORM\Event\LifecycleEventArgs;
 use Doctrine\ORM\Event\PreUpdateEventArgs;
@@ -80,8 +81,8 @@ class Doctrine extends \lithium\data\Source {
 
 		$connection = $this->connectionSettings;
 		$params = compact('connection', 'configuration', 'eventManager');
-		return $this->_filter(__METHOD__, $params,
-			function($self, $params) {
+		return Filters::run($this, __FUNCTION__, $params,
+			function($params) {
 				return \Doctrine\ORM\EntityManager::create(
 					$params['connection'],
 					$params['configuration'],
